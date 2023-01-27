@@ -15,8 +15,8 @@ export const App = () => {
       <Suspense fallback={<div>Loading...</div>}>
         <Routes>
         
-          <Route path="/posts" element={<MainPage />} />
-          <Route path="/posts/:id" element={<PostPage />} />
+          <Route path="/" element={<MainPage />} />
+          <Route path="/:id" element={<PostPage />} />
           <Route path="*" element={<div>Page not found - 404</div>} />        
 
         </Routes>
