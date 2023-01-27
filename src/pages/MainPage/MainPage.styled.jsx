@@ -9,6 +9,7 @@ export const MainPageStyled = styled.ul`
         margin-bottom: 8px;
         padding: 8px;
         border: 1px solid #c1bebe;
+        border-radius: 10px;
         cursor: pointer;
 
         transition: 

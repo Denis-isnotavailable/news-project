@@ -9,7 +9,7 @@ export const fetchPosts = createAsyncThunk('posts/fetchPosts', async (_, thunkAP
             const {data} = await axios.get("topstories.json?print=pretty");
 
             const posts = [];
-            const postsQuantity = data.length <= 100 ? data.length : 100;
+            const postsQuantity = data.length <= 20 ? data.length : 20;
 
             for (let i = 0; i < postsQuantity; i++) {
                 const post = await fetchOnePost(data[i]);
@@ -23,25 +23,6 @@ export const fetchPosts = createAsyncThunk('posts/fetchPosts', async (_, thunkAP
         }
 });
 
-// export const fetchPosts = async () => {
-
-//     try {
-//         const {data} = await axios.get("topstories.json?print=pretty");
-
-//         const posts = [];
-//         // const postsQuantity = data.length <= 100 ? data.length : 100;
-
-//         for (let i = 0; i < 20; i++) {
-//             const post = await fetchOnePost(data[i]);
-//             posts.push(post);
-//         } 
-
-//         return posts;     
-//     } catch (e) {
-//         console.error(e)
-//     }
-// }
-
 
 export async function fetchOnePost(id) {
 
@@ -49,6 +30,26 @@ export async function fetchOnePost(id) {
         const response = await axios.get(`item/${id}.json?print=pretty`)
 
         return response.data;      
+    } catch (e) {
+        console.error(e)
+    }
+}
+
+export async function fetchComments(arr) {
+
+    try {
+        const comments = [];
+        
+        if (!arr.length || arr.length === 0) {
+            return comments;
+        }
+
+        for (let i = 0; i < arr.length; i++) {
+            const comment = await fetchOnePost(arr[i]);
+            comments.push(comment);
+        } 
+
+        return comments;     
     } catch (e) {
         console.error(e)
     }

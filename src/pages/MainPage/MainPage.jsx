@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { NavLink } from "react-router-dom";
 import { fetchPosts } from "redux/operations";
 import { MainPageStyled } from "./MainPage.styled";
 
@@ -22,15 +23,22 @@ const MainPage = () => {
                     const time = new Date(post.time + 1500000000000);
                     const date = time.toString().split(' ').slice(1, 5);                    
                     
-                    return (                        
-                            <li key={post.id}>
+                    return (
+                        <NavLink
+                            key={post.id}
+                            to={`${post.id}`}
+                            style={{textDecoration: "none", color: "#000000"}}
+                        >
+                            <li>
                                 <h2>{post.title}</h2>
                                 <div>
                                     <p>Author: <span>{post.by}</span></p>
                                     <p>Rating: <span>{post.score}</span></p>
                                     <p>Public date: <span>{date.join(' ')}</span></p>
                                 </div>
-                            </li>           
+                            </li> 
+                        </NavLink>
+                                      
                     )
                 })
             }
