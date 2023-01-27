@@ -3,9 +3,9 @@ import { useState } from "react";
 import { fetchComments } from "redux/operations";
 
 
-const DiscussionArea = ({commentId, kids = []}) => {
+const DiscussionArea = ({kids = []}) => {
     const [comments, setComments] = useState([]);
-    const [isDiscussionOpen, setIsDiscussionOpen] = useState(false);
+    const [isDiscussionOpen, setIsDiscussionOpen] = useState(false);    
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -19,7 +19,7 @@ const DiscussionArea = ({commentId, kids = []}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    // console.log(comments);
+    console.log(comments);
 
     return (
         <>
@@ -32,12 +32,22 @@ const DiscussionArea = ({commentId, kids = []}) => {
                     open discussion ({kids.length})
                 </button>
                 :
-                <p>no discussion yet</p>
+                <button
+                    type="button"                    
+                >
+                    no discussion yet ({kids.length})
+                </button>
             }
             {!isDiscussionOpen ||
                 <ul>{
                     comments.map(com => {
-                        return (<li key={com.id}>{ com.text }</li>)
+                        return (
+                            <li key={com.id} style={{paddingLeft: '36px'}}>
+                                <div>{com.text}</div>
+                                <p>---------------------------------------------------</p>
+                                {!com.kids || <DiscussionArea commentId={com.id} kids={com?.kids}/>}
+
+                            </li>)
                     })
                 }</ul>
             }
