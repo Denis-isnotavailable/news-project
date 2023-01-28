@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { fetchComments, fetchOnePost } from "redux/operations";
-import { PostPageStyled } from "./PostPage.styled";
+import { AuthorContainer, BackButton, CommentsContainer, PostPageStyled, TextContainer } from "./PostPage.styled";
 
 
 const PostPage = () => {
@@ -25,37 +25,58 @@ const PostPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    console.log(comments);
+    // console.log(comments);
     // console.log(post);
+
+    const updateComments = async () => {
+        const data = await fetchOnePost(id);
+        const comData = await fetchComments(data.kids);
+        setPost(data)
+        setComments(comData);
+    }
     
 
     return (
-        <PostPageStyled>
-            <h2>{post.title}</h2>
-            <a href={post.url}>{post.url}</a>
-            <p>Post date: {date.join(' ')}</p>
-            <p>Author: {post.by}</p>
-            <h3>Comments ({post.kids ? post.kids?.length : 0})</h3>            
-            <ul>
-                {comments.map(comment => {
-                    const time = new Date(comment.time + 1500000000000);
-                    const date = time.toString().split(' ').slice(1, 5);
-                    return (
-                        <li key={comment.id}>
-                            <div>
-                                <p>Author: {comment.by}</p>
-                                <p>{date.join(' ')}</p>
-                            </div>
-                            <p>{comment.text}</p>
-                            <p>{ !(comment.dead || comment.deleted) || <>comment was deleted</>  }</p>                            
+        <>
+            {!post.title ? <div>Loading...</div> :
+                <PostPageStyled>
+                    <BackButton to={'/'} >Go Back</BackButton>
 
-                            <DiscussionArea commentId={comment.id} kids={comment?.kids} />
+                    <h2>{post.title}</h2>
+                    <a href={post.url}>{post.url}</a>
+
+                    <TextContainer>
+                        <p>Author: {post.by}</p>
+                        <p>Post date: {date.join(' ')}</p>
+                    </TextContainer>
+
+                    <CommentsContainer>
+                        <h3>Comments ({post.kids ? post.kids?.length : 0})</h3>
+                        <button type="button" onClick={updateComments}>Update comments</button>
+                    </CommentsContainer> 
+
+                    <ul>
+                        {comments.map(comment => {
+                            const time = new Date(comment.time + 1500000000000);
+                            const date = time.toString().split(' ').slice(1, 5);
+                            return (
+                                <li key={comment.id}>
+                                    <AuthorContainer>
+                                        <p>Author: {comment.by}</p>
+                                        <p>{date.join(' ')}</p>
+                                    </AuthorContainer>
+                                    <p>{comment.text}</p>
+                                    <p>{!(comment.dead || comment.deleted) || <>comment was deleted</>}</p>
+
+                                    <DiscussionArea commentId={comment.id} kids={comment?.kids} />
                             
-                        </li>
-                    );
-                })}
-            </ul>
-        </PostPageStyled>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </PostPageStyled>
+            }
+        </>
     );
 }
 

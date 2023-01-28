@@ -1,6 +1,8 @@
+import { AuthorContainer } from "pages/PostPage/PostPage.styled";
 import { useEffect } from "react";
 import { useState } from "react";
 import { fetchComments } from "redux/operations";
+import { DiscussionAreaStyled } from "./DiscussionArea.styled";
 
 
 const DiscussionArea = ({kids = []}) => {
@@ -9,9 +11,7 @@ const DiscussionArea = ({kids = []}) => {
 
     useEffect(() => {
         const fetchPost = async () => {
-            // const data = await fetchOnePost(commentId);
             const comData = await fetchComments(kids);
-            // setPost(data)
             setComments(comData);
         }
 
@@ -19,10 +19,10 @@ const DiscussionArea = ({kids = []}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    console.log(comments);
+    // console.log(comments);
 
     return (
-        <>
+        <DiscussionAreaStyled>
 
             { kids.length !== 0 ?
                 <button
@@ -45,12 +45,13 @@ const DiscussionArea = ({kids = []}) => {
                         const date = time.toString().split(' ').slice(1, 5);
                         return (
                             <li key={com.id} style={{ paddingLeft: '36px' }}>
-                                <div>
+                                <AuthorContainer>
                                     <p>Author: {com.by}</p>
                                     <p>{date.join(' ')}</p>
-                                </div>
+                                </AuthorContainer>
                                 <p>{com.text}</p>
-                                <p>---------------------------------------------------</p>
+                                <p>{ !(com.dead || com.deleted) || <>comment was deleted</>  }</p>
+                                
                                 {!com.kids || <DiscussionArea commentId={com.id} kids={com?.kids}/>}
 
                             </li>)
@@ -58,7 +59,7 @@ const DiscussionArea = ({kids = []}) => {
                 }</ul>
             }
             
-        </>
+        </DiscussionAreaStyled>
         
     );
 }

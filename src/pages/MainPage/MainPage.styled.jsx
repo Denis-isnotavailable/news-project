@@ -5,6 +5,23 @@ export const MainPageStyled = styled.ul`
     padding: 40px;
     list-style: none;
 
+    button {
+        cursor: pointer;
+        margin-bottom: 20px;
+        padding: 12px 20px 12px 20px;
+        border-radius: 10px;
+        border: 1px solid #c1bebe;
+        font-size: 20px;
+        font-weight: 700;
+        transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    button:hover {
+        background-color: #c1bebe;
+    }
+
+
+
     li {
         margin-bottom: 8px;
         padding: 8px;

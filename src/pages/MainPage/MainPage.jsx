@@ -11,13 +11,21 @@ const MainPage = () => {
     const posts = useSelector(state => state.posts);
 
     useEffect(() => {
-        dispatch(fetchPosts()); 
+        dispatch(fetchPosts());
+        setInterval(() => {
+            dispatch(fetchPosts());
+        }, 60000);
     }, [dispatch]);
 
-    // console.log(posts);  
+    const updatePage = () => {
+        dispatch(fetchPosts());
+    }
 
     return (
         <MainPageStyled>
+
+            <button type="button" onClick={updatePage}>Update page</button>
+
             {
                 posts.map(post => {
                     const time = new Date(post.time + 1500000000000);
